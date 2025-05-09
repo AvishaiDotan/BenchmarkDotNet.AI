@@ -4,14 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>BenchmarkDotNet.AI</PackageId>
+    <PackageId>BenchmarkDotNetWrapper.AI</PackageId>
     <Version>0.1.0</Version>
-    <Authors>Your Name</Authors>
+    <Authors>Avishai Dotan</Authors>
     <Description>A BenchmarkDotNet extension for AI benchmarking</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
 
