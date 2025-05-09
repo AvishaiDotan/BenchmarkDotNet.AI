@@ -26,7 +26,9 @@ dotnet add package BenchmarkDotNetWrapper.AI
 ```csharp
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNetWrapper.AI;
+using BenchmarkDotNet.AI;
+using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
+using LLM;
 
 [MemoryDiagnoser]
 public class MyBenchmark
@@ -45,10 +47,14 @@ var summary = BenchmarkRunner.Run<MyBenchmark>();
 ### AI-Powered Code Analysis
 
 ```csharp
+using System;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNetWrapper.AI;
-using BenchmarkDotNetWrapper.AI.Analysis;
+using BenchmarkDotNet.AI;
+using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
+using BenchmarkDotNet.AI.LlmEngines.OpenAI;
+using LLM;
 
 [MemoryDiagnoser]
 public class MyBenchmark
@@ -67,15 +73,14 @@ public class MyBenchmark
 }
 
 // Run the benchmark with AI analysis
-var config = new AIAnalysisConfig
+var llmOptions = new LlmEngineOptions
 {
+    EngineType = typeof(OpenAiEngine),
     ApiKey = "your-openai-api-key", // Never stored, only used during execution
-    Provider = AIProvider.OpenAI,
-    ModelName = "gpt-4", // Or other available models
-    SuggestOptimizations = true
+    OveridingPrompt = null // Use the default prompt
 };
 
-var summary = BenchmarkRunner.RunWithAIAnalysis<MyBenchmark>(config);
+var summary = await BenchmarkRunner<MyBenchmark>.Run(llmOptions);
 ```
 
 ### Complete Implementation Example
@@ -90,8 +95,9 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.AI;
-using BenchmarkDotNet.AI.Types;
-using BenchmarkDotNet.AI.Engines;
+using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
+using BenchmarkDotNet.AI.LlmEngines.OpenAI;
+using LLM;
 
 namespace MyBenchmarkProject
 {
@@ -107,7 +113,7 @@ namespace MyBenchmarkProject
                 OveridingPrompt = "Analyze this .NET code for performance issues and suggest specific optimizations"
             };
 
-            var summary = await BenchmarkRunner.RunWithAIAnalysisAsync<StringProcessingBenchmark>(llmOptions);
+            var summary = await BenchmarkRunner<StringProcessingBenchmark>.Run(llmOptions);
         }
     }
 
@@ -177,12 +183,19 @@ The `LlmEngineOptions` class provides the configuration for the LLM engine:
 | `ApiKey` | Your AI provider API key (never stored) | Empty string |
 | `OveridingPrompt` | Custom prompt to override the default | null |
 
+## Default Prompt
+
+BenchmarkDotNet.AI includes a default prompt system that instructs the LLM to analyze the benchmark results. You can view the [full documentation on the default prompt](Docs/api/default-prompt.md) for more details.
 
 ## Requirements
 
 - .NET 8.0 or later
 - BenchmarkDotNet 0.14.0 or later
 - OpenAI API key (for OpenAI provider)
+
+## Documentation
+
+For full documentation, see the [Documentation](Docs/README.md) section.
 
 ## Contributing
 
