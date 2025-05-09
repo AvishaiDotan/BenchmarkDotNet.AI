@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BenchmarkDotNet.AI.Types;
+using System;
 using System.Threading.Tasks;
 
 namespace LLM;
@@ -6,5 +7,5 @@ namespace LLM;
 
 public interface ILlmEngine
 {
-    Task<string> GetCompletionAsync(string req);
+    Task<string> GetCompletionAsync(BenchmarkContext benchmarkContext);
 }
