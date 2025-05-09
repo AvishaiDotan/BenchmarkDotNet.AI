@@ -1,26 +1,33 @@
-# BenchmarkDotNet.AI
+# BenchmarkDotNetWrapper.AI
 
-A BenchmarkDotNet extension for AI benchmarking that helps you measure and analyze the performance of AI-related operations in your .NET applications.
+A BenchmarkDotNet extension for AI model benchmarking that helps you measure and analyze the performance of AI-related operations in your .NET applications.
+
+[![NuGet](https://img.shields.io/nuget/v/BenchmarkDotNetWrapper.AI.svg)](https://www.nuget.org/packages/BenchmarkDotNetWrapper.AI)
 
 ## Features
 
 - Easy integration with BenchmarkDotNet
-- Support for AI-specific benchmarking scenarios
+- Support for AI-specific benchmarking scenarios including OpenAI models
 - Detailed performance metrics and analysis
+- API keys are never stored - only used temporarily for valid providers
+- Code optimization suggestions powered by AI
 - Compatible with .NET 8.0 and later
 
 ## Installation
 
 ```shell
-dotnet add package BenchmarkDotNet.AI
+dotnet add package BenchmarkDotNetWrapper.AI
 ```
 
 ## Usage
 
-```csharp
-using BenchmarkDotNet.AI;
+### Basic Usage
 
-// Create a benchmark class
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNetWrapper.AI;
+
 [MemoryDiagnoser]
 public class MyBenchmark
 {
@@ -35,10 +42,147 @@ public class MyBenchmark
 var summary = BenchmarkRunner.Run<MyBenchmark>();
 ```
 
+### AI-Powered Code Analysis
+
+```csharp
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNetWrapper.AI;
+using BenchmarkDotNetWrapper.AI.Analysis;
+
+[MemoryDiagnoser]
+public class MyBenchmark
+{
+    [Benchmark]
+    public void SlowMethod()
+    {
+        // Inefficient code to analyze
+        var list = new List<int>();
+        for (int i = 0; i < 1000000; i++)
+        {
+            list.Add(i);
+            // Inefficient implementation
+        }
+    }
+}
+
+// Run the benchmark with AI analysis
+var config = new AIAnalysisConfig
+{
+    ApiKey = "your-openai-api-key", // Never stored, only used during execution
+    Provider = AIProvider.OpenAI,
+    ModelName = "gpt-4", // Or other available models
+    SuggestOptimizations = true
+};
+
+var summary = BenchmarkRunner.RunWithAIAnalysis<MyBenchmark>(config);
+```
+
+### Complete Implementation Example
+
+Here's a complete implementation example showing how to set up and use the AI benchmarking features:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.AI;
+using BenchmarkDotNet.AI.Types;
+using BenchmarkDotNet.AI.Engines;
+
+namespace MyBenchmarkProject
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            // Configure the LLM engine options
+            var llmOptions = new LlmEngineOptions
+            {
+                EngineType = typeof(OpenAiEngine),
+                ApiKey = "your-openai-api-key", // Never stored permanently
+                OveridingPrompt = "Analyze this .NET code for performance issues and suggest specific optimizations"
+            };
+
+            var summary = await BenchmarkRunner.RunWithAIAnalysisAsync<StringProcessingBenchmark>(llmOptions);
+        }
+    }
+
+    [MemoryDiagnoser]
+    public class StringProcessingBenchmark
+    {
+        private readonly List<string> _sampleData = new();
+        private const int SampleSize = 10000;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            var random = new Random(42);
+            for (int i = 0; i < SampleSize; i++)
+            {
+                var length = random.Next(10, 100);
+                var chars = new char[length];
+                for (int j = 0; j < length; j++)
+                {
+                    chars[j] = (char)random.Next(97, 123); // a-z
+                }
+                _sampleData.Add(new string(chars));
+            }
+        }
+
+        [Benchmark(Baseline = true)]
+        public int ProcessStringsWithConcat()
+        {
+            var result = string.Empty;
+            foreach (var str in _sampleData)
+            {
+                result += str.ToUpper();
+            }
+            return result.Length;
+        }
+
+        [Benchmark]
+        public int ProcessStringsWithStringBuilder()
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (var str in _sampleData)
+            {
+                sb.Append(str.ToUpper());
+            }
+            return sb.Length;
+        }
+
+        [Benchmark]
+        public int ProcessStringsWithLinq()
+        {
+            var result = string.Join("", _sampleData.Select(s => s.ToUpper()));
+            return result.Length;
+        }
+    }
+}
+```
+
+## Configuration Options
+
+### LlmEngineOptions
+
+The `LlmEngineOptions` class provides the configuration for the LLM engine:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `EngineType` | Type that implements `ILlmEngine` | Required |
+| `ApiKey` | Your AI provider API key (never stored) | Empty string |
+| `OveridingPrompt` | Custom prompt to override the default | null |
+
+
 ## Requirements
 
 - .NET 8.0 or later
 - BenchmarkDotNet 0.14.0 or later
+- OpenAI API key (for OpenAI provider)
 
 ## Contributing
 
