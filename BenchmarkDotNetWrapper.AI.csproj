@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>BenchmarkDotNetWrapper.AI</PackageId>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <Authors>Avishai Dotan</Authors>
     <Description>A BenchmarkDotNet extension for AI benchmarking</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

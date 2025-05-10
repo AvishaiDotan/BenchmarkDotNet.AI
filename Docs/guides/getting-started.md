@@ -5,7 +5,7 @@ This guide will walk you through setting up BenchmarkDotNetWrapper.AI and runnin
 ## Prerequisites
 
 - .NET 8.0 or later
-- BenchmarkDotNet 0.14.0 or later
+- BenchmarkDotNetWrapper
 - An API key for the LLM engine you plan to use (e.g., OpenAI)
 
 ## Installation
