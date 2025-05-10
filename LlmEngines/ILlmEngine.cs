@@ -1,8 +1,8 @@
-﻿using BenchmarkDotNet.AI.Types;
+﻿using BenchmarkDotNetWrapper.AI.Types;
 using System;
 using System.Threading.Tasks;
 
-namespace LLM;
+namespace BenchmarkDotNetWrapper.LLM;
 
 
 public interface ILlmEngine

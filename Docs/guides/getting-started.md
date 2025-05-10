@@ -1,6 +1,6 @@
-# Getting Started with BenchmarkDotNet.AI
+# Getting Started with BenchmarkDotNetWrapper.AI
 
-This guide will walk you through setting up BenchmarkDotNet.AI and running your first AI benchmark.
+This guide will walk you through setting up BenchmarkDotNetWrapper.AI and running your first AI benchmark.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This guide will walk you through setting up BenchmarkDotNet.AI and running your 
 
 ## Installation
 
-Install the BenchmarkDotNet.AI NuGet package using the Package Manager Console:
+Install the BenchmarkDotNetWrapper.AI NuGet package using the Package Manager Console:
 
 ```powershell
 Install-Package BenchmarkDotNetWrapper.AI
@@ -31,10 +31,9 @@ using System;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.AI;
-using BenchmarkDotNet.AI.Types;
-using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
-using LLM;
+using BenchmarkDotNetWrapper.AI;
+using BenchmarkDotNetWrapper.AI.Types;
+using BenchmarkDotNetWrapper.AI.LlmEngines.OpenAI;
 
 namespace MyBenchmarkProject
 {
@@ -49,11 +48,8 @@ namespace MyBenchmarkProject
                 ApiKey = "your-openai-api-key" // Replace with your actual API key
             };
 
-            // Run benchmarks with AI analysis
-            var summary = await BenchmarkRunner<MyBenchmarks>.Run(llmOptions);
-            
-            // The summary contains traditional benchmark results plus AI-powered insights
-            Console.WriteLine(summary.ToString());
+            // Run benchmark and apply AI analysis
+            var summary = await BenchmarkRunner.Run<MyBenchmarks>().WithAI<MyBenchmarks>(llmOptions);
         }
     }
 

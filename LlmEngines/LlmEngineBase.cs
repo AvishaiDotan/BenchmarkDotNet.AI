@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace BenchmarkDotNet.AI.LlmEngines
+namespace BenchmarkDotNetWrapper.AI.LlmEngines
 {
     public abstract class LlmEngineBase
     {

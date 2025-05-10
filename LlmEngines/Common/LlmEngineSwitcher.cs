@@ -1,5 +1,5 @@
-﻿using BenchmarkDotNet.AI.LlmEngines.OpenAI;
-using LLM;
+﻿using BenchmarkDotNetWrapper.AI.LlmEngines.OpenAI;
+using BenchmarkDotNetWrapper.LLM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BenchmarkDotNet.AI.LlmEngines.Common
+namespace BenchmarkDotNetWrapper.AI.LlmEngines.Common
 {
     public class LlmEngineSwitcher : ILlmEngineSwitcher
     {

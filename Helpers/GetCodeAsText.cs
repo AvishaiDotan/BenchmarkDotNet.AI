@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BenchmarkDotNet.AI.Helpers
+namespace BenchmarkDotNetWrapper.AI.Helpers
 {
     public class GetCodeAsText<T> where T : class
     {

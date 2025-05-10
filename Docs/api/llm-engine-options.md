@@ -1,10 +1,10 @@
 # LlmEngineOptions
 
-The `LlmEngineOptions` class provides configuration settings for LLM engines in BenchmarkDotNet.AI.
+The `LlmEngineOptions` class provides configuration settings for LLM engines in BenchmarkDotNetWrapper.AI.
 
 ## Namespace
 
-`BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types`
+`BenchmarkDotNetWrapper.AI.Types`
 
 ## Type
 
@@ -21,14 +21,16 @@ The `LlmEngineOptions` class provides configuration settings for LLM engines in 
 ## Usage Example
 
 ```csharp
-var options = new LlmEngineOptions
+// Configure the LLM engine options
+var llmOptions = new LlmEngineOptions
 {
     EngineType = typeof(OpenAiEngine),
     ApiKey = "your-openai-api-key", // Replace with your actual API key
     OveridingPrompt = "Analyze this benchmark data and suggest optimizations"
 };
 
-var summary = await BenchmarkRunner<MyBenchmarks>.Run(options);
+// Run the benchmark with AI analysis
+var summary = await BenchmarkRunner.Run<MyBenchmarks>().WithAI<MyBenchmarks>(llmOptions);
 ```
 
 ## Remarks

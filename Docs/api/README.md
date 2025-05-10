@@ -1,6 +1,6 @@
 # API Documentation
 
-This section provides detailed documentation for all public classes, interfaces, and methods in BenchmarkDotNet.AI.
+This section provides detailed documentation for all public classes, interfaces, and methods in BenchmarkDotNetWrapper.AI.
 
 ## Core Types
 

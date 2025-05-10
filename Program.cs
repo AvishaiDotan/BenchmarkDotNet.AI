@@ -7,55 +7,56 @@ using System.Text;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.TypeSystem;
-using BenchmarkDotNet.AI.LlmEngines.OpenAI;
-using BenchmarkDotNet.AI.Helpers;
-using BenchmarkDotNet.AI.Types;
+using BenchmarkDotNetWrapper.AI.LlmEngines.OpenAI;
+using BenchmarkDotNetWrapper.AI.Helpers;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
-using LLM;
-using BenchmarkDotNet.AI.LlmEngines.Common;
+using BenchmarkDotNetWrapper.AI.LlmEngines.Common;
 using BenchmarkDotNet.Configs;
-using Perfolizer.Mathematics.Common;
 using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
+using BenchmarkDotNetWrapper.AI.Types;
+using BenchmarkDotNetWrapper.LLM;
 
-namespace BenchmarkDotNet.AI;
-
-public class BenchmarkRunner<T> where T : class
+namespace BenchmarkWrapper.AI
 {
-    public static async Task<Summary> Run(LlmEngineOptions options, IConfig? config = null, string[]? args = null)
+    public static class AIBenchmarkExtensions
     {
-        ILlmEngine engine = LlmEngineSwitcher.GetEngine(options.EngineType, options.ApiKey);
-        string code = GetCodeAsText<T>.Get();
-        var summary = BenchmarkRunner.Run<T>(config, args);
-
-        var benchmarkContext = new BenchmarkContext()
+        public static async Task<Summary> WithAI<T>(this Summary summary, LlmEngineOptions options)
+            where T : class
         {
-            BenchmarkData = summary.Reports.Select(r => new BenchmarkData()
+            ILlmEngine engine = LlmEngineSwitcher.GetEngine(options.EngineType, options.ApiKey);
+            string code = GetCodeAsText<T>.Get();
+
+            var benchmarkContext = new BenchmarkContext()
             {
-                benchmarkStatistics = new BenchmarkStatistics()
+                Code = code,
+                BenchmarkData = summary.Reports.Select(r => new BenchmarkData()
                 {
-                    Max = r.ResultStatistics?.Max,
-                    Min = r.ResultStatistics?.Min,
-                    Mean = r.ResultStatistics?.Mean,
-                    Error = r.ResultStatistics?.StandardError,
-                    StdDev = r.ResultStatistics?.StandardDeviation,
-                    Median = r.ResultStatistics?.Median,
-                    Q3 = r.ResultStatistics?.Q3,
-                    Kurtosis = r.ResultStatistics?.Kurtosis,
-                    InterquartileRange = r.ResultStatistics?.InterquartileRange,
-                    LowerFence = r.ResultStatistics?.LowerFence,
-                    UpperFence = r.ResultStatistics?.UpperFence,
-                    Variance = r.ResultStatistics?.Variance,
-                    Skewness = r.ResultStatistics?.Skewness,
-                    Q1 = r.ResultStatistics?.Q1,
-                    Count = r.ResultStatistics?.N,
-                },
-                Name = r.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo,
-            }).ToList(),
-            Code = code
-        };
-        string reason = await engine.GetCompletionAsync(benchmarkContext);
-        Console.WriteLine(reason);
-        return summary;
+                    Name = r.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo,
+                    benchmarkStatistics = new BenchmarkStatistics()
+                    {
+                        Max = r.ResultStatistics?.Max,
+                        Min = r.ResultStatistics?.Min,
+                        Mean = r.ResultStatistics?.Mean,
+                        Error = r.ResultStatistics?.StandardError,
+                        StdDev = r.ResultStatistics?.StandardDeviation,
+                        Median = r.ResultStatistics?.Median,
+                        Q3 = r.ResultStatistics?.Q3,
+                        Kurtosis = r.ResultStatistics?.Kurtosis,
+                        InterquartileRange = r.ResultStatistics?.InterquartileRange,
+                        LowerFence = r.ResultStatistics?.LowerFence,
+                        UpperFence = r.ResultStatistics?.UpperFence,
+                        Variance = r.ResultStatistics?.Variance,
+                        Skewness = r.ResultStatistics?.Skewness,
+                        Q1 = r.ResultStatistics?.Q1,
+                        Count = r.ResultStatistics?.N,
+                    }
+                }).ToList()
+            };
+
+            string reason = await engine.GetCompletionAsync(benchmarkContext);
+            Console.WriteLine(reason);
+
+            return summary;
+        }
     }
 }

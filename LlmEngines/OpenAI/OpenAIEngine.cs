@@ -1,5 +1,5 @@
-﻿using BenchmarkDotNet.AI.Types;
-using LLM;
+﻿using BenchmarkDotNetWrapper.AI.Types;
+using BenchmarkDotNetWrapper.LLM;
 using OpenAI.Chat;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BenchmarkDotNet.AI.LlmEngines.OpenAI
+namespace BenchmarkDotNetWrapper.AI.LlmEngines.OpenAI
 {
     public class OpenAIEngine : LlmEngineBase, ILlmEngine
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BenchmarkDotNet.AI.Types
+namespace BenchmarkDotNetWrapper.AI.Types
 {
     public record CompletionRequestPayload
     {

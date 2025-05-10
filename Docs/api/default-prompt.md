@@ -1,6 +1,6 @@
 # Default Prompt System
 
-BenchmarkDotNet.AI uses a default prompt system to guide the LLM in analyzing benchmark results. This prompt can be overridden with a custom prompt as needed.
+BenchmarkDotNetWrapper.AI uses a default prompt system to guide the LLM in analyzing benchmark results. This prompt can be overridden with a custom prompt as needed.
 
 ## Location
 
@@ -69,12 +69,16 @@ Output Format:
 You can override the default prompt by setting the `OveridingPrompt` property in the `LlmEngineOptions`:
 
 ```csharp
-var options = new LlmEngineOptions
+// Configure LLM engine options with custom prompt
+var llmOptions = new LlmEngineOptions
 {
     EngineType = typeof(OpenAiEngine),
     ApiKey = "your-openai-api-key",
     OveridingPrompt = "Your custom prompt here"
 };
+
+// Run benchmark with AI analysis using custom prompt
+var summary = await BenchmarkRunner.Run<MyBenchmark>().WithAI<MyBenchmark>(llmOptions);
 ```
 
 ## Considerations When Creating Custom Prompts

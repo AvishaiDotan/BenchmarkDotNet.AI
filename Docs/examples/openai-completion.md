@@ -1,11 +1,11 @@
 # OpenAI Completion Benchmarking Example
 
-This example demonstrates how to benchmark OpenAI completion requests using BenchmarkDotNet.AI.
+This example demonstrates how to benchmark OpenAI completion requests using BenchmarkDotNetWrapper.AI.
 
 ## Prerequisites
 
 - .NET 8.0 or later
-- BenchmarkDotNet.AI package installed
+- BenchmarkDotNetWrapper.AI package installed
 - OpenAI API key
 
 ## Code Example
@@ -15,11 +15,9 @@ using System;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.AI;
-using BenchmarkDotNet.AI.Types;
-using BenchmarkDotNet.AI.Types.BenchmarkDotNet.AI.Types;
-using BenchmarkDotNet.AI.LlmEngines.OpenAI;
-using LLM;
+using BenchmarkDotNetWrapper.AI;
+using BenchmarkDotNetWrapper.AI.Types;
+using BenchmarkDotNetWrapper.AI.LlmEngines.OpenAI;
 
 namespace OpenAiCompletionBenchmark
 {
@@ -32,11 +30,13 @@ namespace OpenAiCompletionBenchmark
             {
                 EngineType = typeof(OpenAiEngine),
                 ApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY"),
-                OveridingPrompt = null // Use default prompt
+                OveridingPrompt = "Analyze this OpenAI completion benchmark"
             };
 
             // Run the benchmark with AI analysis
-            var summary = await BenchmarkRunner<OpenAiCompletionBenchmarks>.Run(llmOptions);
+            var summary = await BenchmarkRunner.Run<OpenAiCompletionBenchmarks>()
+                .WithAI<OpenAiCompletionBenchmarks>(llmOptions);
+
             Console.WriteLine(summary.ToString());
         }
     }
